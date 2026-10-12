@@ -1,9 +1,11 @@
 """Main entry point for the visualizer"""
 
+from SortingVisualizerIpujol10.Visualizer import Visualizer  # type: ignore
+
 
 def main() -> None:
     """Visualizer"""
-    return
+    Visualizer()
 
 
 if __name__ == "__main__":
