@@ -7,7 +7,7 @@ import tkinter as tk
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from SortingVisualizerIpujol10.Visualizer import Visualizer
+    from SortingVisualizerIpujol10.Visualizer import Visualizer  # type: ignore
 
 
 class MyScreen(ABC, tk.Frame):
