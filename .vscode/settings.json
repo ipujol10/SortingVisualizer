@@ -2,6 +2,9 @@
     "editor.lineNumbers": "relative",
     "editor.formatOnSave": true,
     "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingTypeStubs": "none"
+    },
     "editor.rulers": [
         80,
         120

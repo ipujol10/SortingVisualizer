@@ -5,6 +5,8 @@ from __future__ import annotations
 from types import TracebackType
 import random
 import tkinter as tk
+from SortingVisualizerIpujol10.GUI import MyScreen, MainVisualizer
+from SortingVisualizerIpujol10.Utils import Screens
 
 
 class Visualizer(tk.Tk):
@@ -15,6 +17,22 @@ class Visualizer(tk.Tk):
         self.is_root_alive: bool = True
         self.data: list[int]
         self._generateInitialRandomSample(10)
+
+        self.title("Sorting Visualizer")
+        self.mainframe: tk.Frame = tk.Frame(self, width=1000, height=100)
+        self.mainframe.grid(column=0, row=0, sticky="nsew")
+        self._current_frame: tk.Frame
+        self._frames: dict[Screens, MyScreen] = {}
+        for i, f in enumerate((MainVisualizer,)):
+            frame = f(parent=self.mainframe, controller=self)
+            self._frames[Screens(i)] = frame
+
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        self.showScreen(Screens.VISUALIZER)
+        self.is_root_alive = True
+
+        self.resizable(width=False, height=False)
 
     def __enter__(self) -> Visualizer:
         return self
@@ -35,3 +53,8 @@ class Visualizer(tk.Tk):
             num = random.choice(initial)
             self.data.append(num)
             initial.remove(num)
+
+    def showScreen(self, screen: Screens) -> None:
+        """Show a screen"""
+        self._current_frame = self._frames[screen]
+        self._current_frame.tkraise()  # type: ignore
