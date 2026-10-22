@@ -19,7 +19,7 @@ class Visualizer(tk.Tk):
         self._generateInitialRandomSample(10)
 
         self.title("Sorting Visualizer")
-        self.mainframe: tk.Frame = tk.Frame(self, width=1000, height=100)
+        self.mainframe: tk.Frame = tk.Frame(self)
         self.mainframe.grid(column=0, row=0, sticky="nsew")
         self._current_frame: tk.Frame
         self._frames: dict[Screens, MyScreen] = {}
@@ -32,7 +32,7 @@ class Visualizer(tk.Tk):
         self.showScreen(Screens.VISUALIZER)
         self.is_root_alive = True
 
-        self.resizable(width=False, height=False)
+        # self.resizable(width=False, height=False)
 
     def __enter__(self) -> Visualizer:
         return self
