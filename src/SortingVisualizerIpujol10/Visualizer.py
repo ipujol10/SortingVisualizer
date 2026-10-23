@@ -34,6 +34,14 @@ class Visualizer(tk.Tk):
 
         self.resizable(width=False, height=False)
 
+        self.menubar: tk.Menu = tk.Menu(self)
+        file = tk.Menu(self)
+        file.add_command(label="Test1", command=lambda: print("test1"))
+        file.add_command(label="Test2", command=lambda: print("test2"))
+        self.menubar.add_cascade(menu=file, label="File")
+        self.menubar.add_command(label="Settings", underline=0)
+        self.configure(menu=self.menubar)
+
     def __enter__(self) -> Visualizer:
         return self
 
