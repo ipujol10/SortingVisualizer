@@ -47,6 +47,21 @@ class MainVisualizer(MyScreen):
         self._coordinates[0] = (x00, coord1[1], x01, coord1[3])
         self._coordinates[9] = (x10, coord10[1], x11, coord10[3])
 
-        for i, h in enumerate(self.controller.data):
+        self._draw()
+
+    def _swap(self, i: int, j: int) -> None:
+        a: int = self.controller.data[i]
+        b: int = self.controller.data[j]
+        coord_a: tuple[int, ...] = self._coordinates[a - 1]
+        coord_b: tuple[int, ...] = self._coordinates[b - 1]
+        xa0: int = coord_b[0]
+        xa1: int = coord_b[2]
+        xb0: int = coord_a[0]
+        xb1: int = coord_a[2]
+        self._coordinates[a - 1] = (xa0, coord_a[1], xa1, coord_a[3])
+        self._coordinates[b - 1] = (xb0, coord_b[1], xb1, coord_b[3])
+
+    def _draw(self) -> None:
+        for h in self.controller.data:
             self._canvas.delete(str(h))
             self._canvas.create_rectangle(*self._coordinates[h - 1], fill="green", tags=str(h))

@@ -32,7 +32,7 @@ class Visualizer(tk.Tk):
         self.showScreen(Screens.VISUALIZER)
         self.is_root_alive = True
 
-        # self.resizable(width=False, height=False)
+        self.resizable(width=False, height=False)
 
     def __enter__(self) -> Visualizer:
         return self
