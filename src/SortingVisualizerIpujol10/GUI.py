@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
-from abc import ABC
+from abc import ABC, abstractmethod
 import tkinter as tk
 from typing import TYPE_CHECKING
+
+from SortingVisualizerIpujol10.Utils import Screens
 
 if TYPE_CHECKING:
     from SortingVisualizerIpujol10.Visualizer import Visualizer
@@ -14,8 +16,15 @@ class MyScreen(ABC, tk.Frame):
     """Interface for screens"""
 
     def __init__(self, parent: tk.Frame, controller: Visualizer) -> None:
-        tk.Frame.__init__(self, master=parent)
+        self.width: int = 1000
+        self.height: int = 500
+
+        tk.Frame.__init__(self, master=parent, width=self.width, height=self.height)
         self.controller: Visualizer = controller
+
+    @abstractmethod
+    def setSettings(self) -> None:
+        """Set settings when needed"""
 
 
 class MainVisualizer(MyScreen):
@@ -24,17 +33,20 @@ class MainVisualizer(MyScreen):
     def __init__(self, parent: tk.Frame, controller: Visualizer) -> None:
         MyScreen.__init__(self, parent, controller)
 
-        width: int = 1000
-        height: int = 500
         size: int = len(self.controller.data)
-        d_width: int = width // size
-        d_height: int = height // size
+        d_width: int = self.width // size
+        d_height: int = self.height // size
 
-        self._canvas: tk.Canvas = tk.Canvas(self, width=width, height=height)
+        self._canvas: tk.Canvas = tk.Canvas(self, width=self.width, height=self.height)
         self._canvas.grid(row=0, column=0, sticky="nsew")
         self._coordinates: list[tuple[int, int, int, int]] = [(0, 0, 0, 0) for _ in range(size)]
         for i, h in enumerate(self.controller.data):
-            coords: tuple[int, int, int, int] = (i * d_width, height - h * d_height, (i + 1) * d_width, height)
+            coords: tuple[int, int, int, int] = (
+                i * d_width,
+                self.height - h * d_height,
+                (i + 1) * d_width,
+                self.height,
+            )
             self._canvas.create_rectangle(*coords, fill="green", tags=str(h))
             self._coordinates[h - 1] = coords
 
@@ -65,3 +77,24 @@ class MainVisualizer(MyScreen):
         for h in self.controller.data:
             self._canvas.delete(str(h))
             self._canvas.create_rectangle(*self._coordinates[h - 1], fill="green", tags=str(h))
+
+    def setSettings(self) -> None:
+        self.controller.menubar.entryconfigure("Settings", state="active")
+
+
+class Settings(MyScreen):
+    """Settings screen"""
+
+    def __init__(self, parent: tk.Frame, controller: Visualizer) -> None:
+        MyScreen.__init__(self, parent, controller)
+
+        tk.Button(
+            self,
+            text="Visualizer",
+            command=lambda: self.controller.showScreen(Screens.VISUALIZER),
+        ).grid(column=0, row=0)
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+
+    def setSettings(self) -> None:
+        self.controller.menubar.entryconfigure("Settings", state="disabled")
