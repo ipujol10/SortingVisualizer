@@ -38,7 +38,7 @@ class MainVisualizer(MyScreen):
         d_height: int = self.height // size
 
         self._canvas: tk.Canvas = tk.Canvas(self, width=self.width, height=self.height)
-        self._canvas.grid(row=0, column=0, sticky="nsew")
+        self._canvas.pack(side="top", fill="both")
         self._coordinates: list[tuple[int, int, int, int]] = [(0, 0, 0, 0) for _ in range(size)]
         for i, h in enumerate(self.controller.data):
             coords: tuple[int, int, int, int] = (
@@ -58,6 +58,30 @@ class MainVisualizer(MyScreen):
         x11 = coord1[2]
         self._coordinates[0] = (x00, coord1[1], x01, coord1[3])
         self._coordinates[9] = (x10, coord10[1], x11, coord10[3])
+
+        controls: tk.Frame = tk.Frame(self)
+        controls.pack(side="bottom", fill="x")
+        controls.columnconfigure(0, weight=1)
+        controls.columnconfigure(1, weight=1)
+        controls.columnconfigure(2, weight=1)
+        controls.rowconfigure(0, weight=1)
+
+        self._sorting_type_var: tk.StringVar = tk.StringVar(self, value="Test", name="sorting_type_var")
+        self._start_stop_button_var: tk.StringVar = tk.StringVar(self, value="Start", name="start_stop_button_var")
+        tk.Label(
+            controls,
+            textvariable=self._sorting_type_var,
+        ).grid(row=0, column=0)
+        tk.Button(
+            controls,
+            textvariable=self._start_stop_button_var,
+            command=lambda: print("Start"),
+        ).grid(row=0, column=1)
+        tk.Button(
+            controls,
+            text="Restart",
+            command=lambda: print("Restart"),
+        ).grid(column=2, row=0)
 
         self._draw()
 
