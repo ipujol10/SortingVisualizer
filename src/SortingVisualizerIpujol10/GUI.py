@@ -116,9 +116,28 @@ class Settings(MyScreen):
             self,
             text="Visualizer",
             command=lambda: self.controller.showScreen(Screens.VISUALIZER),
-        ).grid(column=0, row=0)
-        self.columnconfigure(0, weight=1)
-        self.rowconfigure(0, weight=1)
+        ).pack(side="top", pady=15)
+
+        self._frame: tk.Frame = tk.Frame(self)
+        self._frame.pack(fill="y", expand=True)
+        self._selection: tk.IntVar = tk.IntVar(self, 0)
+        self._values: list[str] = [f"Label {i+1}" for i in range(10)]
+        self._drawOptions()
+
+        tk.Button(
+            self,
+            text="Refresh",
+        ).pack(side="bottom", pady=15)
 
     def setSettings(self) -> None:
         self.controller.menubar.entryconfigure("Settings", state="disabled")
+
+    def _drawOptions(self) -> None:
+        self._selection.set(0)
+        for i, val in enumerate(self._values):
+            tk.Radiobutton(
+                self._frame,
+                text=val,
+                variable=self._selection,
+                value=i,
+            ).pack(anchor="w")
