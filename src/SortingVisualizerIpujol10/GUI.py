@@ -127,7 +127,18 @@ class Settings(MyScreen):
         tk.Button(
             self,
             text="Refresh",
-        ).pack(side="bottom", pady=15)
+        ).pack(pady=15)
+
+        location: tk.Frame = tk.Frame(self)
+        location.pack(side="bottom", fill="x", expand=True)
+        tk.Label(location, text="Location: ").pack(side="left")
+        self._location_var: tk.StringVar = tk.StringVar(self, value="")
+        tk.Label(
+            location,
+            textvariable=self._location_var,
+            relief="sunken",
+        ).pack()
+        tk.Button(location, text="Select").pack(side="right")
 
     def setSettings(self) -> None:
         self.controller.menubar.entryconfigure("Settings", state="disabled")
