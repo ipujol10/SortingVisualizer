@@ -37,7 +37,7 @@ class Visualizer(tk.Tk):
         self.menubar.add_command(label="Settings", underline=0, command=lambda: self.showScreen(Screens.SETTINGS))
         self.configure(menu=self.menubar)
 
-        self.showScreen(Screens.SETTINGS)
+        self.showScreen(Screens.VISUALIZER)
 
     def __enter__(self) -> Visualizer:
         return self
@@ -64,3 +64,7 @@ class Visualizer(tk.Tk):
         self._current_frame = self._frames[screen]
         self._current_frame.setSettings()
         self._current_frame.tkraise()  # type: ignore
+
+    def getSelection(self) -> str:
+        """Get function selected in settings"""
+        return self._frames[Screens.SETTINGS].getSelection()
