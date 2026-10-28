@@ -32,6 +32,10 @@ class MyScreen(ABC, tk.Frame):
     def getSelection(self) -> str:
         """Get function selected in settings"""
 
+    @abstractmethod
+    def getSize(self) -> int:
+        """Get the size of the sample selected in settings"""
+
 
 class MainVisualizer(MyScreen):
     """Main Visualizer Screen"""
@@ -115,6 +119,9 @@ class MainVisualizer(MyScreen):
     def getSelection(self) -> str:
         raise ValueError("Function called on the wrong class")
 
+    def getSize(self) -> int:
+        raise ValueError("Function called on the wrong class")
+
 
 class Settings(MyScreen):
     """Settings screen"""
@@ -140,6 +147,15 @@ class Settings(MyScreen):
             text="Refresh",
             command=self._drawOptions,
         ).pack(pady=15)
+
+        size: tk.Frame = tk.Frame(self)
+        size.pack(anchor="w")
+        size.columnconfigure(0, weight=1)
+        size.columnconfigure(1, weight=1)
+        tk.Label(size, text="Sample size: ").grid(row=0, column=0)
+        self._size: tk.StringVar = tk.StringVar(self, value=str(self.controller.getSize()))
+        self._size_entry: tk.Entry = tk.Entry(size, textvariable=self._size)
+        self._size_entry.grid(row=0, column=1)
 
         location: tk.Frame = tk.Frame(self)
         location.pack(side="bottom", fill="x", expand=True)
@@ -189,3 +205,6 @@ class Settings(MyScreen):
         self._location_var.set(folder)
         self._values = sorted(file.name for file in Path(folder).glob("*.py") if file.is_file())
         self._drawOptions()
+
+    def getSize(self) -> int:
+        return int(self._size.get())

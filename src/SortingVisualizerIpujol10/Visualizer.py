@@ -16,7 +16,8 @@ class Visualizer(tk.Tk):
         tk.Tk.__init__(self)
         self.is_root_alive: bool = True
         self.data: list[int]
-        self._generateInitialRandomSample(10)
+        self._current_size: int = 10
+        self._generateInitialRandomSample(self._current_size)
 
         self.title("Sorting Visualizer")
         self.mainframe: tk.Frame = tk.Frame(self)
@@ -68,3 +69,11 @@ class Visualizer(tk.Tk):
     def getSelection(self) -> str:
         """Get function selected in settings"""
         return self._frames[Screens.SETTINGS].getSelection()
+
+    def getSize(self) -> int:
+        """Get the sample size"""
+        return self._current_size
+
+    def setSize(self) -> None:
+        """Set the sample size"""
+        self._current_size = self._frames[Screens.SETTINGS].getSize()
