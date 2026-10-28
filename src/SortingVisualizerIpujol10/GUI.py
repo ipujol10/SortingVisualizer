@@ -141,14 +141,15 @@ class Settings(MyScreen):
 
         location: tk.Frame = tk.Frame(self)
         location.pack(side="bottom", fill="x", expand=True)
-        tk.Label(location, text="Location: ").pack(side="left")
+        location.columnconfigure(1, weight=1)
+        tk.Label(location, text="Location: ").grid(row=0, column=0)
         self._location_var: tk.StringVar = tk.StringVar(self, value="")
         tk.Label(
             location,
             textvariable=self._location_var,
             relief="sunken",
-        ).pack()
-        tk.Button(location, text="Select").pack(side="right")
+        ).grid(column=1, row=0, sticky="ew", padx=8)
+        tk.Button(location, text="Select").grid(row=0, column=2)
 
     def setSettings(self) -> None:
         self.controller.menubar.entryconfigure("Settings", state="disabled")
