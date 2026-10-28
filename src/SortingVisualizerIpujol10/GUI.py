@@ -122,11 +122,13 @@ class Settings(MyScreen):
         self._frame.pack(fill="y", expand=True)
         self._selection: tk.IntVar = tk.IntVar(self, 0)
         self._values: list[str] = [f"Label {i+1}" for i in range(10)]
+        self._radios: list[tk.Radiobutton] = []
         self._drawOptions()
 
         tk.Button(
             self,
             text="Refresh",
+            command=self._drawOptions,
         ).pack(pady=15)
 
         location: tk.Frame = tk.Frame(self)
@@ -144,11 +146,16 @@ class Settings(MyScreen):
         self.controller.menubar.entryconfigure("Settings", state="disabled")
 
     def _drawOptions(self) -> None:
+        for radio in self._radios:
+            radio.destroy()
+        self._radios.clear()
         self._selection.set(0)
         for i, val in enumerate(self._values):
-            tk.Radiobutton(
+            radio: tk.Radiobutton = tk.Radiobutton(
                 self._frame,
                 text=val,
                 variable=self._selection,
                 value=i,
-            ).pack(anchor="w")
+            )
+            radio.pack(anchor="w")
+            self._radios.append(radio)
