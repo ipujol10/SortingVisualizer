@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 import tkinter as tk
+from tkinter import filedialog
 from typing import TYPE_CHECKING
 
 from SortingVisualizerIpujol10.Utils import Screens
@@ -143,13 +144,17 @@ class Settings(MyScreen):
         location.pack(side="bottom", fill="x", expand=True)
         location.columnconfigure(1, weight=1)
         tk.Label(location, text="Location: ").grid(row=0, column=0)
-        self._location_var: tk.StringVar = tk.StringVar(self, value="")
+        self._location_var: tk.StringVar = tk.StringVar(self, value="N/A")
         tk.Label(
             location,
             textvariable=self._location_var,
             relief="sunken",
         ).grid(column=1, row=0, sticky="ew", padx=8)
-        tk.Button(location, text="Select").grid(row=0, column=2)
+        tk.Button(
+            location,
+            text="Select",
+            command=self._selectLocation,
+        ).grid(row=0, column=2)
 
     def setSettings(self) -> None:
         self.controller.menubar.entryconfigure("Settings", state="disabled")
@@ -170,4 +175,12 @@ class Settings(MyScreen):
             self._radios.append(radio)
 
     def getSelection(self) -> str:
-        return self._values[self._selection.get()]
+        return self._values[self._selection.get()] if self._values else "N/A"
+
+    def _selectLocation(self) -> None:
+        folder: str = filedialog.askdirectory(
+            parent=self,
+            title="Select the functions directory",
+        )
+        if folder:
+            self._location_var.set(folder)
