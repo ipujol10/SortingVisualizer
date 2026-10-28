@@ -26,6 +26,10 @@ class MyScreen(ABC, tk.Frame):
     def setSettings(self) -> None:
         """Set settings when needed"""
 
+    @abstractmethod
+    def getSelection(self) -> str:
+        """Get function selected in settings"""
+
 
 class MainVisualizer(MyScreen):
     """Main Visualizer Screen"""
@@ -104,6 +108,10 @@ class MainVisualizer(MyScreen):
 
     def setSettings(self) -> None:
         self.controller.menubar.entryconfigure("Settings", state="active")
+        self._sorting_type_var.set(self.controller.getSelection())
+
+    def getSelection(self) -> str:
+        raise ValueError("Function called on the wrong class")
 
 
 class Settings(MyScreen):
@@ -159,3 +167,6 @@ class Settings(MyScreen):
             )
             radio.pack(anchor="w")
             self._radios.append(radio)
+
+    def getSelection(self) -> str:
+        return self._values[self._selection.get()]
