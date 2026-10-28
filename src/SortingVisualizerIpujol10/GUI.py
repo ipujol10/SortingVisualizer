@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from pathlib import Path
 import tkinter as tk
 from tkinter import filedialog
 from typing import TYPE_CHECKING
@@ -130,7 +131,7 @@ class Settings(MyScreen):
         self._frame: tk.Frame = tk.Frame(self)
         self._frame.pack(fill="y", expand=True)
         self._selection: tk.IntVar = tk.IntVar(self, 0)
-        self._values: list[str] = [f"Label {i+1}" for i in range(10)]
+        self._values: list[str] = []
         self._radios: list[tk.Radiobutton] = []
         self._drawOptions()
 
@@ -175,12 +176,16 @@ class Settings(MyScreen):
             self._radios.append(radio)
 
     def getSelection(self) -> str:
-        return self._values[self._selection.get()] if self._values else "N/A"
+        return self._values[self._selection.get()][:-3] if self._values else "N/A"
 
     def _selectLocation(self) -> None:
         folder: str = filedialog.askdirectory(
             parent=self,
             title="Select the functions directory",
         )
-        if folder:
-            self._location_var.set(folder)
+        if not folder:
+            return
+
+        self._location_var.set(folder)
+        self._values = sorted(file.name for file in Path(folder).glob("*.py") if file.is_file())
+        self._drawOptions()
